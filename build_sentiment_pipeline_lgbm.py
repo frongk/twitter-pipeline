@@ -21,6 +21,7 @@ from model.pipeline_util import TypeTransform
 import pickle
 
 N_ESTIMATORS = 800
+SEED = 12 # to make random_state consistent
 
 # make dir to store data
 if not os.path.exists('data'):
@@ -55,7 +56,7 @@ data = pandas.read_csv('data/training.1600000.processed.noemoticon.csv', encodin
 raw_x = data[5]
 raw_y = data[0].map(lambda x: 1 if x==4 else 0)
 
-X_train, X_test, y_train, y_test = train_test_split(raw_x, raw_y, test_size=0.3)
+X_train, X_test, y_train, y_test = train_test_split(raw_x, raw_y, test_size=0.3, random_state=SEED)
 
 # items
 print('building pipeline object')
@@ -72,6 +73,7 @@ t_trans=TypeTransform(astype='float64')
 clf = lightgbm.LGBMClassifier(num_leaves=31,
                              learning_rate=0.3,
                              n_estimators=N_ESTIMATORS,
+                             random_state=SEED,
                              n_jobs=3,
                              silent=False)
 
